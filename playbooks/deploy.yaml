@@ -1,0 +1,19 @@
+---
+ -name: Deploy Tomcat Aritifacts to romote servers
+ hosts: appservers
+ 
+ tasks:
+ -name: to stop apache tomcat
+  shell: ps -ef | grep tomcat grep -v "grep" | awk '{print $2}' | xarge kill -9
+  ignore_errors: yes
+  
+  - name: To remove old war files
+  shall: rm -rf /opt/apache-tomcat-8.5/webapps/petclinic*
+  
+  -name: To copy war file 
+  copy:
+  scr: /home/ubuntu/jenkins/workspace/pipeline_petclinic/target/petclinic.war
+  dest: /opt/apache-tomcat-8.5/webapps/ 
+  
+  -name: to start apache tomcat
+  shell: nohup /opt/apache-tomcat-8.5/bin/catalina.sh start
